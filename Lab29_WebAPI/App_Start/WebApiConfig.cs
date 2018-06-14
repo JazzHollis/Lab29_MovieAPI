@@ -14,9 +14,16 @@ namespace Lab29_WebAPI
             // Web API routes
             config.MapHttpAttributeRoutes();
 
+            //Removes the XML formatter, so the next one will be JSON
+            config.Formatters.Remove(config.Formatters.XmlFormatter);
+
+            //This line will stop the infinite loop caused by the navigation properties
+            config.Formatters.JsonFormatter.SerializerSettings.ReferenceLoopHandling
+            = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
-                routeTemplate: "api/{controller}/{id}",
+                routeTemplate: "api/{controller}/{action}/{id}",//action helps us enable multiple actions
                 defaults: new { id = RouteParameter.Optional }
             );
         }
